@@ -62,44 +62,6 @@ class PlatinaGame: Game(){
 			microAverageWagePerTick = 35f
 
 			publicServicesDecaySpeed = .001f
-
-			debtAssetFactorDiscontentThreshold =  arrayOf(1f, 2f)
-			debtAssetFactorBelowDiscontentFactor = -.0001f
-			debtAssetFactorAboveDiscontentFactor = .001f
-			nonDebtDiscontentDecaySpeed = -.001f
-			gdppcDiscontentThreshold = arrayOf(50f, 300f)
-			gdppcBelowDiscontentFactor = .01f
-			gdppcAboveDiscontentFactor = -.000001f
-			unemploymentDiscontentFactor = .001f
-			personTaxDiscontentThreshold = arrayOf(.2f, .5f)
-			personTaxBelowDiscontentFactor = -.0001f
-			personTaxAboveDiscontentFactor = .001f
-			microTaxDiscontentThreshold = arrayOf(.2f, .5f)
-			microTaxBelowDiscontentFactor = -.0001f
-			microTaxAboveDiscontentFactor = .001f
-			mediumTaxDiscontentThreshold = arrayOf(.2f, .5f)
-			mediumTaxBelowDiscontentFactor = -.0001f
-			mediumTaxAboveDiscontentFactor = .001f
-			bigTaxDiscontentThreshold = arrayOf(.2f, .5f)
-			bigTaxBelowDiscontentFactor = -.0001f
-			bigTaxAboveDiscontentFactor = .001f
-			publicServicesDiscontentThreshold = arrayOf(.5f, .75f)
-			publicServicesBelowDiscontentFactor = .1f
-			publicServicesAboveDiscontentFactor = -.001f
-			populationDecreaseSpeed = 2
-			populationIncreaseSpeed = 3
-			discontentMicroJobsThreshold = arrayOf(.5f, .75f)
-			discontentBelowMicroJobsFactor = .01f
-			discontentAboveMicroJobsFactor = -.01f
-			discontentMediumJobsThreshold = arrayOf(.5f, .75f)
-			discontentBelowMediumJobsFactor = .01f
-			discontentAboveMediumJobsFactor = -.01f
-			discontentBigJobsThreshold = arrayOf(.5f, .75f)
-			discontentBelowBigJobsFactor = .01f
-			discontentAboveBigJobsFactor = -.01f
-			discontentPopulationThreshold = arrayOf(.5f, .75f)
-			discontentBelowPopulationFactor = 1f
-			discontentAbovePopulationFactor = -1f
 		}
 
 		setScreen(mainGameplay)
