@@ -1,9 +1,10 @@
 package nacholab.platina.model
 
 class Country {
-    var tickTime = 1L
+    var tickTime = 10L
     var status = CountryStatus()
     var entities = arrayListOf<Entity>()
+    var tickCount = 0L
 
     private var lastTick = -1L
 
@@ -11,16 +12,31 @@ class Country {
         val tickOffset = if (lastTick==-1L) tickTime else (System.currentTimeMillis() - lastTick)
 
         if (tickOffset >= tickTime){
-            taxRevenue(status)
-            publicServicesDecay(status)
+            status.assets += status.calculateTaxRevenue()
+            decayPublicServices(status)
+            val discontentFactor =
+                status.discontentFactorBasedOnServicesDecay() +
+                status.discontentFactorBasedOnTaxation()
+
+            updateDiscontent(status, discontentFactor)
 
             entities.forEach { entity -> entity.tick(status) }
             getEvent()?.execute(status)
             lastTick = System.currentTimeMillis()
+            tickCount++
         }
     }
 
-    private fun publicServicesDecay(status: CountryStatus) {
+    private fun updateDiscontent(status: CountryStatus, discontentFactor: Float){
+        status.discontent += status.discontentIncreaseSpeed * discontentFactor
+        status.discontent = status
+            .discontent
+            .coerceAtMost(1f)
+            .coerceAtLeast(0f)
+
+    }
+
+    private fun decayPublicServices(status: CountryStatus) {
         status.publicServicesStatus -= status.publicServicesDecaySpeed
         status.publicServicesStatus = status.publicServicesStatus.coerceAtLeast(0f)
     }
@@ -37,23 +53,6 @@ class Country {
 
     private fun getEvent(): Event?{
         return null
-    }
-
-    private fun taxRevenue(status: CountryStatus){
-        val publicJobsMoney = status.publicAverageWagePerTick * status.publiclyEmployedPopulation
-        val microJobsMoney = status.microAverageWagePerTick * status.microEmployedPopulation
-        val mediumJobsMoney = status.mediumAverageWagePerTick * status.mediumEmployedPopulation
-        val bigJobsMoney = status.bigAverageWagePerTick * status.bigEmployedPopulation
-        val allMoney = microJobsMoney + mediumJobsMoney + bigJobsMoney + publicJobsMoney
-
-        val personTaxMoney =  allMoney * status.taxPerPersonPerTick
-        val microTaxMoney = microJobsMoney * status.taxPerMicroPerTick
-        val mediumTaxMoney = mediumJobsMoney * status.taxPerMediumPerTick
-        val bigTaxMoney = bigJobsMoney * status.taxPerBigPerTick
-
-        val totalRevenue = personTaxMoney + microTaxMoney + mediumTaxMoney + bigTaxMoney
-
-        status.assets+=totalRevenue.toLong()
     }
 
 }

@@ -38,7 +38,7 @@ class PlatinaGame: Game(){
 
 			discontent = 0f
 			publicServicesStatus = 1f
-			population = 44000000
+			population = 100
 			employablePopulationFactor = .6f
 
 			microEmployedPopulation = floor(population * employablePopulationFactor * .2f).toLong()
@@ -62,6 +62,22 @@ class PlatinaGame: Game(){
 			microAverageWagePerTick = 35f
 
 			publicServicesDecaySpeed = .001f
+
+			discontentIncreaseSpeed = .01f
+
+			discontentPublicServicesMaxFactor = .01f
+
+			discontentPersonTaxThreshold = .25f
+			discontentPersonTaxMaxFactor = .01f
+
+			discontentMicroTaxThreshold = .25f
+			discontentMicroTaxMaxFactor = .01f
+
+			discontentMediumTaxThreshold = .25f
+			discontentMediumTaxMaxFactor = .01f
+
+			discontentBigTaxThreshold = .25f
+			discontentBigTaxMaxFactor = .01f
 		}
 
 		setScreen(mainGameplay)

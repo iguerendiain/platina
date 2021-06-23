@@ -1,5 +1,6 @@
 package nacholab.platina.model
 
+import nacholab.platina.NachoLabMathUtils
 import java.lang.StringBuilder
 import kotlin.math.floor
 
@@ -31,11 +32,22 @@ class CountryStatus {
     var microAverageWagePerTick = 0f
     var mediumAverageWagePerTick = 0f
     var bigAverageWagePerTick = 0f
-    var publicAverageWagePerTick = 0f;
+    var publicAverageWagePerTick = 0f
 
     var subsidyPerPersonPerTick = 0f
 
     var publicServicesDecaySpeed = 0f
+
+    var discontentIncreaseSpeed = 0f
+    var discontentPublicServicesMaxFactor = 0f
+    var discontentPersonTaxThreshold = 0f
+    var discontentPersonTaxMaxFactor = 0f
+    var discontentMicroTaxThreshold = 0f
+    var discontentMicroTaxMaxFactor = 0f
+    var discontentMediumTaxThreshold = 0f
+    var discontentMediumTaxMaxFactor = 0f
+    var discontentBigTaxThreshold = 0f
+    var discontentBigTaxMaxFactor = 0f
 
     fun calculateUnemploymentFactor(): Float {
         val totalEmployment = microEmployedPopulation + mediumEmployedPopulation + bigEmployedPopulation + publiclyEmployedPopulation
@@ -82,5 +94,55 @@ class CountryStatus {
         stringBuilder.append("Public: $$publicAverageWagePerTick")
 
         return stringBuilder.toString()
+    }
+
+    fun discontentFactorBasedOnServicesDecay() =
+        NachoLabMathUtils.inverseFactor(publicServicesStatus, discontentPublicServicesMaxFactor)
+
+    fun discontentFactorBasedOnTaxation() =
+        discontentFactorBasedOnPersonsTaxation() +
+        discontentFactorBasedOnMicroTaxation() +
+        discontentFactorBasedOnMediumTaxation() +
+        discontentFactorBasedOnBigTaxation()
+
+    private fun discontentFactorBasedOnPersonsTaxation() = NachoLabMathUtils.inverseFactorWithMinimum(
+        taxPerPersonPerTick,
+        discontentPersonTaxThreshold,
+        discontentPersonTaxMaxFactor
+    )
+
+    private fun discontentFactorBasedOnMicroTaxation() = NachoLabMathUtils.inverseFactorWithMinimum(
+        taxPerMicroPerTick,
+        discontentMicroTaxMaxFactor,
+        discontentMicroTaxMaxFactor
+    )
+
+    private fun discontentFactorBasedOnMediumTaxation() = NachoLabMathUtils.inverseFactorWithMinimum(
+        taxPerMediumPerTick,
+        discontentMediumTaxThreshold,
+        discontentMediumTaxMaxFactor
+    )
+
+    private fun discontentFactorBasedOnBigTaxation() = NachoLabMathUtils.inverseFactorWithMinimum(
+        taxPerBigPerTick,
+        discontentBigTaxThreshold,
+        discontentBigTaxMaxFactor
+    )
+
+    fun calculateTaxRevenue(): Long{
+        val publicJobsMoney = publicAverageWagePerTick * publiclyEmployedPopulation
+        val microJobsMoney = microAverageWagePerTick * microEmployedPopulation
+        val mediumJobsMoney = mediumAverageWagePerTick * mediumEmployedPopulation
+        val bigJobsMoney = bigAverageWagePerTick * bigEmployedPopulation
+        val allMoney = microJobsMoney + mediumJobsMoney + bigJobsMoney + publicJobsMoney
+
+        val personTaxMoney =  allMoney * taxPerPersonPerTick
+        val microTaxMoney = microJobsMoney * taxPerMicroPerTick
+        val mediumTaxMoney = mediumJobsMoney * taxPerMediumPerTick
+        val bigTaxMoney = bigJobsMoney * taxPerBigPerTick
+
+        val totalRevenue = personTaxMoney + microTaxMoney + mediumTaxMoney + bigTaxMoney
+
+        return totalRevenue.toLong()
     }
 }

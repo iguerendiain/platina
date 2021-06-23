@@ -21,7 +21,7 @@ class MainGameplay(private val game: PlatinaGame): Screen {
 
         game.defaultFont.draw(
             game.batch,
-            game.country.status.toString(),
+            "TICKS (DAYS): ${game.country.tickCount}\n\n" + game.country.status.toString(),
             10f,
             game.cameraHeight-10
         )
